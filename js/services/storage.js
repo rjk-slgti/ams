@@ -33,6 +33,10 @@ const StorageService = {
     },
 
     exportToJSON: (atm) => {
+        if (atm.governance.status !== 'frozen') {
+            alert("QMS approval (Frozen Status) required before export.");
+            return;
+        }
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(atm, null, 2));
         const downloadAnchorNode = document.createElement('a');
         downloadAnchorNode.setAttribute("href", dataStr);

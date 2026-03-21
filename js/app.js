@@ -9,6 +9,7 @@ import ModulesUI from './ui/modules.js';
 import ScopeUI from './ui/scope.js';
 import DeliveryUI from './ui/delivery.js';
 import EvaluationUI from './ui/evaluation.js';
+import ComplianceUI from './ui/compliance.js';
 import DerivationEngine from './engine/derivation.js';
 
 // Global state
@@ -24,6 +25,7 @@ function initApp() {
     ScopeUI.init();
     DeliveryUI.init();
     EvaluationUI.init();
+    ComplianceUI.init();
 
     // Navigation Logic
     const navButtons = document.querySelectorAll('#main-nav button');
@@ -44,6 +46,10 @@ function initApp() {
             if (sectionId === 'section-ca2') EvaluationUI.renderMarks();
             if (sectionId === 'section-sdr') EvaluationUI.renderStudentRecords();
             if (sectionId === 'section-pg') EvaluationUI.renderPracticalGuide();
+            if (sectionId === 'section-compliance') ComplianceUI.render();
+
+            // Apply Governance Locking
+            ComplianceUI.applyLocking();
 
             // UI Update
             navButtons.forEach(b => b.classList.remove('active'));
@@ -59,6 +65,7 @@ function initApp() {
     if (loadedData) {
         Object.assign(currentATM, loadedData);
         syncContextToUI();
+        ComplianceUI.applyLocking();
     }
 
     // Save Context Button

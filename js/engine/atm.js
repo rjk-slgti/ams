@@ -29,6 +29,18 @@ const ATM = {
         practicalGuides: [], // Array of PG records: { sessionNo, title, steps: [] }
         lastSaved: null,
         version: "1.0.0"
+    },
+    governance: {
+        currentRole: "Instructor",
+        status: "draft",   // draft | reviewed | frozen
+        approvals: {
+            hod: false,
+            qms: false
+        },
+        timestamps: {
+            hod: null,
+            qms: null
+        }
     }
 };
 

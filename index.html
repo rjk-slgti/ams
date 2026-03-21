@@ -26,6 +26,13 @@
     <button data-section="section-ca2">Eval: Marks (CA2)</button>
     <button data-section="section-sdr">Eval: Student Record (SDR)</button>
     <button data-section="section-pg">Eval: Practical Guide (PG)</button>
+    <div style="border-left: 1px solid white; margin: 0 10px; height: 30px; align-self: center;"></div>
+    <select id="role-selector" style="margin-right: 10px; padding: 5px; border-radius: 4px;">
+        <option value="Instructor">Instructor</option>
+        <option value="HOD">HOD (Approval)</option>
+        <option value="QMS">QMS (Quality Control)</option>
+    </select>
+    <button data-section="section-compliance" class="primary">Governance & Compliance</button>
 </nav>
 
 <main>
@@ -289,15 +296,40 @@
         <button class="primary" id="btn-save-sdr">Save Student Record</button>
     </section>
 
-    <!-- PG Practical Guide Section -->
-    <section id="section-pg" class="view-section">
-        <div style="display:flex; justify-content: space-between; align-items: center;">
-            <h2>PG: Practical Guide</h2>
-            <button class="primary" onclick="window.print()">Print Guides</button>
         </div>
-        <p>Dynamic guides generated for all Practical sessions.</p>
-        <div id="pg-container">
-            <!-- Practical guides injected here -->
+    </section>
+
+    <!-- Compliance & Governance Section -->
+    <section id="section-compliance" class="view-section">
+        <h2>Governance & Compliance</h2>
+        <div class="document-card" style="margin-bottom: 2rem;">
+            <h3>Document Status: <span id="governance-status-badge" style="padding: 5px 10px; border-radius: 4px; background: #eee; text-transform: uppercase;">DRAFT</span></h3>
+            <p>Role-based approval workflow for academic records.</p>
+            
+            <div id="hod-control" style="margin-top: 2rem; padding: 1rem; border: 1px solid #ddd; border-radius: 4px;">
+                <h4>HOD Review</h4>
+                <p id="hod-audit-text">Pending review...</p>
+                <button id="btn-approve-hod" class="primary">Approve as HOD</button>
+            </div>
+
+            <div id="qms-control" style="margin-top: 1rem; padding: 1rem; border: 1px solid #ddd; border-radius: 4px;">
+                <h4>QMS Verification</h4>
+                <p id="qms-audit-text">Awaiting HOD approval...</p>
+                <button id="btn-freeze-qms" class="primary">Freeze as QMS</button>
+            </div>
+
+            <div id="export-pack-control" style="margin-top: 2rem; padding: 1.5rem; border: 2px solid var(--primary-color); border-radius: 4px; text-align: center;">
+                <h4>Accreditation Pack</h4>
+                <p>Generate final TVEC-compliant document pack.</p>
+                <button id="btn-generate-pack" class="secondary" style="width: 100%; font-size: 1.2rem;">Generate Accreditation Pack (PDF)</button>
+            </div>
+        </div>
+
+        <div id="governance-audit-trace" class="document-card">
+            <h3>Audit Trace</h3>
+            <div id="audit-log-content">
+                <!-- Audit logs injected here -->
+            </div>
         </div>
     </section>
 </main>
@@ -315,5 +347,6 @@
 </div>
 
 <script type="module" src="js/app.js"></script>
+    <div id="printArea" style="display: none;"></div>
 </body>
 </html>

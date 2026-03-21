@@ -55,6 +55,54 @@ nav button:hover, nav button.active {
     border-radius: 4px;
 }
 
+/* --- PHASE 6: PRINT STYLES --- */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #printArea, #printArea * {
+        visibility: visible;
+    }
+    #printArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        display: block !important;
+    }
+    .page-break {
+        page-break-before: always;
+        margin-top: 2rem;
+    }
+    .print-header {
+        color: #b30000; /* SLGTI Red */
+        border-bottom: 2px solid #b30000;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1.5rem;
+    }
+    th {
+        background-color: #fceaea;
+        color: #b30000;
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    .cover-page {
+        text-align: center;
+        padding-top: 5rem;
+    }
+    .cover-page h1 { font-size: 3rem; color: #b30000; }
+    .cover-page h2 { font-size: 2rem; margin-top: 2rem; }
+}
 main {
     max-width: 1000px;
     margin: 2rem auto;
