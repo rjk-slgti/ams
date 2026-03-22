@@ -8,345 +8,406 @@
 </head>
 <body>
 
-<header>
-    <h1>SLGTI Academic Document Management System</h1>
-</header>
-
-<nav id="main-nav">
-    <button data-section="section-home" class="active">Context</button>
-    <button data-section="section-modules">Modules</button>
-    <button data-section="section-students">Students</button>
-    <button data-section="section-t1">T1: Planning</button>
-    <button data-section="section-t2">T2: Lessons</button>
-    <button data-section="section-ca1">CA1: Assessment</button>
-    <div style="border-left: 1px solid white; margin: 0 10px; height: 30px; align-self: center;"></div>
-    <button data-section="section-sa">Delivery: Attendance</button>
-    <button data-section="section-tdr">Delivery: Daily Record</button>
-    <div style="border-left: 1px solid white; margin: 0 10px; height: 30px; align-self: center;"></div>
-    <button data-section="section-ca2">Eval: Marks (CA2)</button>
-    <button data-section="section-sdr">Eval: Student Record (SDR)</button>
-    <button data-section="section-pg">Eval: Practical Guide (PG)</button>
-    <div style="border-left: 1px solid white; margin: 0 10px; height: 30px; align-self: center;"></div>
-    <select id="role-selector" style="margin-right: 10px; padding: 5px; border-radius: 4px;">
-        <option value="Instructor">Instructor</option>
-        <option value="HOD">HOD (Approval)</option>
-        <option value="QMS">QMS (Quality Control)</option>
-    </select>
-    <button data-section="section-compliance" class="primary">Governance & Compliance</button>
-</nav>
-
-<main>
-    <!-- Home Section -->
-    <section id="section-home" class="view-section active">
-        <h2>Academic Context</h2>
-        <div class="form-group">
-            <label for="institution">Institution</label>
-            <input type="text" id="institution" value="SLGTI" readonly>
-        </div>
-        <div class="form-group">
-            <label for="department">Department</label>
-            <input type="text" id="department" placeholder="e.g. Information Technology">
-        </div>
-        <div class="form-group">
-            <label for="course">Course Name</label>
-            <input type="text" id="course" placeholder="e.g. NVQ Level 4 Full Stack Development">
-        </div>
-        <div class="form-group">
-            <label for="academic-year">Academic Year</label>
-            <input type="text" id="academic-year" placeholder="e.g. 2024/2025">
-        </div>
-        <div class="form-group">
-            <label for="semester">Semester</label>
-            <select id="semester">
-                <option value="1">Semester 1</option>
-                <option value="2">Semester 2</option>
-            </select>
-        </div>
-        <div class="actions">
-            <button class="primary" id="btn-save-context">Save Context</button>
-            <button id="btn-export-json">Export ATM</button>
-            <button id="btn-import-json">Import ATM</button>
-        </div>
-    </section>
-
-    <!-- Students Section -->
-    <section id="section-students" class="view-section">
-        <h2>Student Management</h2>
-        <div class="form-group">
-            <label for="student-name">Student Name</label>
-            <input type="text" id="student-name" placeholder="e.g. John Doe">
-        </div>
-        <button class="primary" id="btn-add-student">Add Student</button>
-        
-        <table id="students-table" style="margin-top: 2rem;">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </section>
-
-    <!-- Modules Section -->
-    <section id="section-modules" class="view-section">
-        <h2>Module Management</h2>
-        <div id="module-form-container">
-            <div class="form-group">
-                <label for="mod-code">Code</label>
-                <input type="text" id="mod-code" placeholder="e.g. ICT4-M01">
-            </div>
-            <div class="form-group">
-                <label for="mod-name">Name</label>
-                <input type="text" id="mod-name" placeholder="e.g. Programming Basics">
-            </div>
-            <div class="form-group">
-                <label for="mod-theory">Theory Hours</label>
-                <input type="number" id="mod-theory" min="0" value="0">
-            </div>
-            <div class="form-group">
-                <label for="mod-practical">Practical Hours</label>
-                <input type="number" id="mod-practical" min="0" value="0">
-            </div>
-            <button class="primary" id="btn-add-module">Add Module</button>
-        </div>
-
-        <table id="modules-table">
-            <thead>
-                <tr>
-                    <th>Code</th>
-                    <th>Name</th>
-                    <th>Theory</th>
-                    <th>Practical</th>
-                    <th>Total</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </section>
-
-    <!-- T1 Section -->
-    <section id="section-t1" class="view-section">
-        <div style="display:flex; justify-content: space-between; align-items: center;">
-            <h2>T1: Training Plan</h2>
-            <button class="primary" onclick="window.print()">Print T1</button>
-        </div>
-        <table id="t1-table">
-            <thead>
-                <tr>
-                    <th>Month</th>
-                    <th>Week</th>
-                    <th>Session</th>
-                    <th>Task</th>
-                    <th>Resources</th>
-                    <th>Assessment</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </section>
-
-    <!-- T2 Section -->
-    <section id="section-t2" class="view-section">
-        <div style="display:flex; justify-content: space-between; align-items: center;">
-            <h2>T2: Lesson Plan</h2>
-            <button class="primary" onclick="window.print()">Print T2</button>
-        </div>
-        <div id="t2-container">
-            <!-- Tables injected here -->
-        </div>
-    </section>
-
-    <!-- CA1 Section -->
-    <section id="section-ca1" class="view-section">
-        <div style="display:flex; justify-content: space-between; align-items: center;">
-            <h2>CA1: Assessment Plan</h2>
-            <button class="primary" onclick="window.print()">Print CA1</button>
-        </div>
-        <table id="ca1-table">
-            <thead>
-                <tr>
-                    <th>Type</th>
-                    <th>Weight (%)</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-            <tfoot>
-                <tr style="font-weight: bold; background: #eee;">
-                    <td>Total</td>
-                    <td id="ca1-total">0%</td>
-                </tr>
-            </tfoot>
-        </table>
-        <div id="ca1-validation-msg" style="margin-top: 1rem; font-weight: bold;"></div>
-    </section>
-
-    <!-- SA Attendance Section -->
-    <section id="section-sa" class="view-section">
-        <h2>SA: Student Attendance</h2>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
-            <div class="form-group">
-                <label for="sa-session">Session</label>
-                <select id="sa-session"></select>
-            </div>
-            <div class="form-group">
-                <label for="sa-date">Date</label>
-                <input type="date" id="sa-date">
-            </div>
+<div class="app">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1 class="system-title">SLGTI AMS</h1>
         </div>
         
-        <table id="sa-table">
-            <thead>
-                <tr>
-                    <th>Student Name</th>
-                    <th>Present</th>
-                    <th>Absent</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <button class="primary" id="btn-save-sa">Save Attendance</button>
-    </section>
-
-    <!-- TDR Daily Record Section -->
-    <section id="section-tdr" class="view-section">
-        <h2>TDR: Trainer Daily Record</h2>
-        <div class="form-group">
-            <label for="tdr-session">Session</label>
-            <select id="tdr-session"></select>
-        </div>
-        <div class="form-group">
-            <label for="tdr-date">Date</label>
-            <input type="date" id="tdr-date">
-        </div>
-        <div class="form-group">
-            <label for="tdr-topic">Topic Delivered</label>
-            <input type="text" id="tdr-topic">
-        </div>
-        <div class="form-group">
-            <label for="tdr-remarks">Remarks</label>
-            <textarea id="tdr-remarks"></textarea>
-        </div>
-        <div class="form-group">
-            <label for="tdr-issues">Issues (if any)</label>
-            <input type="text" id="tdr-issues">
-        </div>
-        <button class="primary" id="btn-save-tdr">Save Record</button>
-    </section>
-
-    <!-- CA2 Assessment Marks Section -->
-    <section id="section-ca2" class="view-section">
-        <h2>CA2: Assessment Marks</h2>
-        <div class="form-group">
-            <label for="ca2-type">Assessment Type</label>
-            <select id="ca2-type">
-                <option value="Theory">Theory</option>
-                <option value="Practical">Practical</option>
-            </select>
-        </div>
-        
-        <table id="ca2-table">
-            <thead>
-                <tr>
-                    <th>Student Name</th>
-                    <th>Score (0-100)</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <button class="primary" id="btn-save-ca2">Save Marks</button>
-    </section>
-
-    <!-- SDR Student Daily Record Section -->
-    <section id="section-sdr" class="view-section">
-        <h2>SDR: Student Daily Record</h2>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
-            <div class="form-group">
-                <label for="sdr-session">Session</label>
-                <select id="sdr-session"></select>
-            </div>
-            <div class="form-group">
-                <label for="sdr-student">Student</label>
-                <select id="sdr-student"></select>
-            </div>
-            <div class="form-group">
-                <label for="sdr-date">Date</label>
-                <input type="date" id="sdr-date">
-            </div>
-            <div class="form-group">
-                <label for="sdr-performance">Performance</label>
-                <select id="sdr-performance">
-                    <option value="Excellent">Excellent</option>
-                    <option value="Good">Good</option>
-                    <option value="Satisfactory">Satisfactory</option>
-                    <option value="Needs Improvement">Needs Improvement</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="sdr-activity">Activity Performed</label>
-            <textarea id="sdr-activity" placeholder="Describe what the student did..."></textarea>
-        </div>
-        <div class="form-group">
-            <label for="sdr-remarks">Remarks</label>
-            <input type="text" id="sdr-remarks" placeholder="Optional notes">
-        </div>
-        <button class="primary" id="btn-save-sdr">Save Student Record</button>
-    </section>
-
-        </div>
-    </section>
-
-    <!-- Compliance & Governance Section -->
-    <section id="section-compliance" class="view-section">
-        <h2>Governance & Compliance</h2>
-        <div class="document-card" style="margin-bottom: 2rem;">
-            <h3>Document Status: <span id="governance-status-badge" style="padding: 5px 10px; border-radius: 4px; background: #eee; text-transform: uppercase;">DRAFT</span></h3>
-            <p>Role-based approval workflow for academic records.</p>
+        <nav class="sidebar-nav">
+            <div class="menu-category">ACADEMIC SETUP</div>
+            <button data-section="section-home" class="active">Scope</button>
+            <button data-section="section-modules">Modules</button>
+            <button data-section="section-students">Sessions</button>
             
-            <div id="hod-control" style="margin-top: 2rem; padding: 1rem; border: 1px solid #ddd; border-radius: 4px;">
-                <h4>HOD Review</h4>
-                <p id="hod-audit-text">Pending review...</p>
-                <button id="btn-approve-hod" class="primary">Approve as HOD</button>
-            </div>
-
-            <div id="qms-control" style="margin-top: 1rem; padding: 1rem; border: 1px solid #ddd; border-radius: 4px;">
-                <h4>QMS Verification</h4>
-                <p id="qms-audit-text">Awaiting HOD approval...</p>
-                <button id="btn-freeze-qms" class="primary">Freeze as QMS</button>
-            </div>
-
-            <div id="export-pack-control" style="margin-top: 2rem; padding: 1.5rem; border: 2px solid var(--primary-color); border-radius: 4px; text-align: center;">
-                <h4>Accreditation Pack</h4>
-                <p>Generate final TVEC-compliant document pack.</p>
-                <button id="btn-generate-pack" class="secondary" style="width: 100%; font-size: 1.2rem;">Generate Accreditation Pack (PDF)</button>
-            </div>
+            <div class="menu-category">PLANNING</div>
+            <button data-section="section-t1">T1 Training Plan</button>
+            <button data-section="section-t2">T2 Lesson Plan</button>
+            <button data-section="section-ca1">CA1 Assessment Plan</button>
+            
+            <div class="menu-category">DELIVERY</div>
+            <button data-section="section-sa">Attendance (SA)</button>
+            <button data-section="section-tdr">Daily Record (TDR)</button>
+            <button data-section="section-tm">Materials (TM)</button>
+            
+            <div class="menu-category">EVALUATION</div>
+            <button data-section="section-ca2">Marks (CA2)</button>
+            <button data-section="section-sdr">Student Record (SDR)</button>
+            <button data-section="section-pg">Practical Guide (PG)</button>
+            
+            <div class="menu-category">COMPLIANCE</div>
+            <button data-section="section-compliance">Review</button>
+            <button data-section="section-compliance">Freeze</button>
+            <button data-section="section-compliance">Export</button>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <select id="role-selector">
+                <option value="Instructor">Instructor</option>
+                <option value="HOD">HOD (Approval)</option>
+                <option value="QMS">QMS (Quality Control)</option>
+            </select>
         </div>
+    </aside>
 
-        <div id="governance-audit-trace" class="document-card">
-            <h3>Audit Trace</h3>
-            <div id="audit-log-content">
-                <!-- Audit logs injected here -->
+    <div class="main">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button id="sidebar-toggle" aria-label="Toggle Sidebar">☰</button>
+                <span class="topbar-title">SLGTI Academic Engine</span>
             </div>
-        </div>
-    </section>
-</main>
+            <div class="topbar-info">
+                <div class="status-group">
+                    <span class="label">Role:</span>
+                    <span id="role-indicator" class="value">Instructor</span>
+                </div>
+                <div class="status-group">
+                    <span class="label">Status:</span>
+                    <span id="status-indicator" class="value">Draft</span>
+                </div>
+            </div>
+        </header>
+
+        <section class="content" id="workspace">
+            <!-- Home Section (Scope) -->
+            <section id="section-home" class="view-section active">
+                <h2>Academic Context (Scope)</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="institution">Institution</label>
+                        <input type="text" id="institution" value="SLGTI" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="department">Department</label>
+                        <input type="text" id="department" placeholder="e.g. Information Technology">
+                    </div>
+                    <div class="form-group">
+                        <label for="course">Course Name</label>
+                        <input type="text" id="course" placeholder="e.g. NVQ Level 4 Full Stack Development">
+                    </div>
+                    <div class="form-group">
+                        <label for="academic-year">Academic Year</label>
+                        <input type="text" id="academic-year" placeholder="e.g. 2024/2025">
+                    </div>
+                    <div class="form-group">
+                        <label for="semester">Semester</label>
+                        <select id="semester">
+                            <option value="1">Semester 1</option>
+                            <option value="2">Semester 2</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="primary" id="btn-save-context">Save Context</button>
+                    <button class="secondary" id="btn-export-json">Export ATM</button>
+                    <button class="secondary" id="btn-import-json">Import ATM</button>
+                </div>
+            </section>
+
+            <!-- Students Section (Sessions Placeholder) -->
+            <section id="section-students" class="view-section">
+                <h2>Session & Student Management</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="student-name">Student Name</label>
+                        <input type="text" id="student-name" placeholder="e.g. John Doe">
+                    </div>
+                </div>
+                <button class="primary" id="btn-add-student">Add Student</button>
+                
+                <table id="students-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- Modules Section -->
+            <section id="section-modules" class="view-section">
+                <h2>Module Management</h2>
+                <div id="module-form-container">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="mod-code">Code</label>
+                            <input type="text" id="mod-code" placeholder="e.g. ICT4-M01">
+                        </div>
+                        <div class="form-group">
+                            <label for="mod-name">Name</label>
+                            <input type="text" id="mod-name" placeholder="e.g. Programming Basics">
+                        </div>
+                        <div class="form-group">
+                            <label for="mod-theory">Theory Hours</label>
+                            <input type="number" id="mod-theory" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="mod-practical">Practical Hours</label>
+                            <input type="number" id="mod-practical" min="0" value="0">
+                        </div>
+                    </div>
+                    <button class="primary" id="btn-add-module">Add Module</button>
+                </div>
+
+                <table id="modules-table">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Theory</th>
+                            <th>Practical</th>
+                            <th>Total</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- T1 Section -->
+            <section id="section-t1" class="view-section">
+                <div class="section-header">
+                    <h2>T1: Training Plan</h2>
+                    <button class="secondary" onclick="window.print()">Print T1</button>
+                </div>
+                <table id="t1-table">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Week</th>
+                            <th>Session</th>
+                            <th>Task</th>
+                            <th>Resources</th>
+                            <th>Assessment</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- T2 Section -->
+            <section id="section-t2" class="view-section">
+                <div class="section-header">
+                    <h2>T2: Lesson Plan</h2>
+                    <button class="secondary" onclick="window.print()">Print T2</button>
+                </div>
+                <div id="t2-container">
+                    <!-- Tables injected here -->
+                </div>
+            </section>
+
+            <!-- CA1 Section -->
+            <section id="section-ca1" class="view-section">
+                <div class="section-header">
+                    <h2>CA1: Assessment Plan</h2>
+                    <button class="secondary" onclick="window.print()">Print CA1</button>
+                </div>
+                <table id="ca1-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Weight (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td>Total</td>
+                            <td id="ca1-total">0%</td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div id="ca1-validation-msg" class="validation-msg"></div>
+            </section>
+
+            <!-- SA Attendance Section -->
+            <section id="section-sa" class="view-section">
+                <h2>SA: Student Attendance</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="sa-session">Session</label>
+                        <select id="sa-session"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sa-date">Date</label>
+                        <input type="date" id="sa-date">
+                    </div>
+                </div>
+                
+                <table id="sa-table">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Present</th>
+                            <th>Absent</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <button class="primary" id="btn-save-sa">Save Attendance</button>
+            </section>
+
+            <!-- TDR Daily Record Section -->
+            <section id="section-tdr" class="view-section">
+                <h2>TDR: Trainer Daily Record</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="tdr-session">Session</label>
+                        <select id="tdr-session"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="tdr-date">Date</label>
+                        <input type="date" id="tdr-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="tdr-topic">Topic Delivered</label>
+                        <input type="text" id="tdr-topic">
+                    </div>
+                    <div class="form-group">
+                        <label for="tdr-issues">Issues (if any)</label>
+                        <input type="text" id="tdr-issues">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="tdr-remarks">Remarks</label>
+                    <textarea id="tdr-remarks"></textarea>
+                </div>
+                <button class="primary" id="btn-save-tdr">Save Record</button>
+            </section>
+
+            <!-- TM Materials Section (Placeholder) -->
+            <section id="section-tm" class="view-section">
+                <h2>TM: Teaching Materials</h2>
+                <p>Upload and manage teaching materials here.</p>
+                <div class="placeholder-card">
+                    Component coming soon in next phase.
+                </div>
+            </section>
+
+            <!-- CA2 Assessment Marks Section -->
+            <section id="section-ca2" class="view-section">
+                <h2>CA2: Assessment Marks</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="ca2-type">Assessment Type</label>
+                        <select id="ca2-type">
+                            <option value="Theory">Theory</option>
+                            <option value="Practical">Practical</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <table id="ca2-table">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Score (0-100)</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <button class="primary" id="btn-save-ca2">Save Marks</button>
+            </section>
+
+            <!-- SDR Student Daily Record Section -->
+            <section id="section-sdr" class="view-section">
+                <h2>SDR: Student Daily Record</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="sdr-session">Session</label>
+                        <select id="sdr-session"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sdr-student">Student</label>
+                        <select id="sdr-student"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sdr-date">Date</label>
+                        <input type="date" id="sdr-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="sdr-performance">Performance</label>
+                        <select id="sdr-performance">
+                            <option value="Excellent">Excellent</option>
+                            <option value="Good">Good</option>
+                            <option value="Satisfactory">Satisfactory</option>
+                            <option value="Needs Improvement">Needs Improvement</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sdr-activity">Activity Performed</label>
+                    <textarea id="sdr-activity" placeholder="Describe what the student did..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="sdr-remarks">Remarks</label>
+                    <input type="text" id="sdr-remarks" placeholder="Optional notes">
+                </div>
+                <button class="primary" id="btn-save-sdr">Save Student Record</button>
+            </section>
+
+            <!-- Practical Guide Section -->
+            <section id="section-pg" class="view-section">
+                <h2>Practical Guide (PG)</h2>
+                <p>Manage practical implementation guides.</p>
+                <div id="pg-container">
+                    <!-- Practical guides injected here -->
+                </div>
+            </section>
+
+            <!-- Compliance & Governance Section -->
+            <section id="section-compliance" class="view-section">
+                <h2>Governance & Compliance</h2>
+                <div class="card">
+                    <div class="status-summary">
+                        <h3>Document Status: <span id="governance-status-badge">DRAFT</span></h3>
+                    </div>
+                    
+                    <div class="control-grid">
+                        <div id="hod-control" class="control-box">
+                            <h4>HOD Review</h4>
+                            <p id="hod-audit-text">Pending review...</p>
+                            <button id="btn-approve-hod" class="primary">Approve as HOD</button>
+                        </div>
+
+                        <div id="qms-control" class="control-box">
+                            <h4>QMS Verification</h4>
+                            <p id="qms-audit-text">Awaiting HOD approval...</p>
+                            <button id="btn-freeze-qms" class="primary">Freeze as QMS</button>
+                        </div>
+                    </div>
+
+                    <div class="export-box">
+                        <h4>Accreditation Pack</h4>
+                        <p>Generate final TVEC-compliant document pack.</p>
+                        <button id="btn-generate-pack" class="secondary">Generate Accreditation Pack</button>
+                    </div>
+                </div>
+
+                <div class="card audit-card">
+                    <h3>Audit Trace</h3>
+                    <div id="audit-log-content"></div>
+                </div>
+            </section>
+        </section>
+    </div>
+</div>
 
 <div id="modal-overlay">
     <div class="modal">
         <h3>Import ATM Data</h3>
-        <p>Select a .json file to load.</p>
+        <p>Select a .json file to load from your computer.</p>
         <input type="file" id="json-file-input" accept=".json">
-        <div class="actions">
+        <div class="modal-actions">
             <button class="primary" id="btn-confirm-import">Import</button>
-            <button id="btn-close-modal">Cancel</button>
+            <button class="secondary" id="btn-close-modal">Cancel</button>
         </div>
     </div>
 </div>
 
 <script type="module" src="js/app.js"></script>
-    <div id="printArea" style="display: none;"></div>
+<div id="printArea" style="display: none;"></div>
 </body>
 </html>

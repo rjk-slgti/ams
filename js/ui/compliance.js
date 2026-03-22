@@ -39,18 +39,31 @@ const ComplianceUI = {
 
     render: () => {
         const statusBadge = document.getElementById('governance-status-badge');
+        const roleIndicator = document.getElementById('role-indicator');
+        const statusIndicator = document.getElementById('status-indicator');
         const hodAudit = document.getElementById('hod-audit-text');
         const btnApproveHod = document.getElementById('btn-approve-hod');
         const qmsAudit = document.getElementById('qms-audit-text');
         const btnFreezeQms = document.getElementById('btn-freeze-qms');
         const auditLog = document.getElementById('audit-log-content');
 
-        if (!statusBadge) return;
-
-        // Current Status
         const status = currentATM.governance.status;
-        statusBadge.textContent = status;
-        statusBadge.style.background = status === 'frozen' ? '#ffcccc' : (status === 'reviewed' ? '#ccffcc' : '#eee');
+        const role = currentATM.governance.currentRole;
+
+        // Update Topbar Indicators
+        if (roleIndicator) roleIndicator.textContent = role;
+        if (statusIndicator) {
+            statusIndicator.textContent = status;
+            // Add color feedback to topbar status
+            statusIndicator.style.color = status === 'frozen' ? '#C00000' : (status === 'reviewed' ? '#2e7d32' : '#333');
+        }
+
+        if (statusBadge) {
+            statusBadge.textContent = status;
+            statusBadge.style.background = status === 'frozen' ? '#ffcccc' : (status === 'reviewed' ? '#ccffcc' : '#eee');
+        }
+
+        if (!hodAudit) return;
 
         // HOD Status
         if (currentATM.governance.approvals.hod) {
@@ -111,10 +124,10 @@ const ComplianceUI = {
         // So if status is NOT Draft, or Role is NOT Instructor -> Disable inputs
         const shouldDisable = isFrozen || isReviewed || currentRole !== 'Instructor';
 
-        const inputs = document.querySelectorAll('input, select, textarea');
+        const inputs = document.querySelectorAll('input, select, textarea, button.primary');
         inputs.forEach(el => {
-            // Keep role-selector and nav buttons enabled always (unless we specify otherwise)
-            if (el.id !== 'role-selector') {
+            // Keep role-selector and sidebar-toggle enabled always
+            if (el.id !== 'role-selector' && el.id !== 'sidebar-toggle') {
                 el.disabled = shouldDisable;
             }
         });

@@ -1,8 +1,3 @@
-/**
- * Main Application Logic
- * Bootstraps the SLGTI AMS and handles navigation/storage interactions.
- */
-
 import ATM from './engine/atm.js';
 import StorageService from './services/storage.js';
 import ModulesUI from './ui/modules.js';
@@ -10,7 +5,6 @@ import ScopeUI from './ui/scope.js';
 import DeliveryUI from './ui/delivery.js';
 import EvaluationUI from './ui/evaluation.js';
 import ComplianceUI from './ui/compliance.js';
-import DerivationEngine from './engine/derivation.js';
 
 // Global state
 let currentATM = Object.assign({}, ATM);
@@ -27,40 +21,51 @@ function initApp() {
     EvaluationUI.init();
     ComplianceUI.init();
 
-    // Navigation Logic
-    const navButtons = document.querySelectorAll('#main-nav button');
+    // Navigation & Sidebar Toggle
+    const navButtons = document.querySelectorAll('.sidebar-nav button');
     const sections = document.querySelectorAll('.view-section');
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const topbarTitle = document.querySelector('.topbar-title');
+
+    // Sidebar toggle for mobile/compact view
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+    }
 
     navButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             const sectionId = btn.dataset.section;
-            
-            // Sync UI before showing section
-            if (sectionId === 'section-modules') ModulesUI.render();
-            if (sectionId === 'section-students') DeliveryUI.renderStudents();
-            if (sectionId === 'section-t1') ScopeUI.renderTrainingPlan();
-            if (sectionId === 'section-t2') ScopeUI.renderLessonPlans();
-            if (sectionId === 'section-ca1') ScopeUI.renderAssessmentPlan();
-            if (sectionId === 'section-sa') DeliveryUI.renderAttendance();
-            if (sectionId === 'section-tdr') DeliveryUI.renderTDR();
-            if (sectionId === 'section-ca2') EvaluationUI.renderMarks();
-            if (sectionId === 'section-sdr') EvaluationUI.renderStudentRecords();
-            if (sectionId === 'section-pg') EvaluationUI.renderPracticalGuide();
-            if (sectionId === 'section-compliance') ComplianceUI.render();
+            if (!sectionId) return; // Category headers are not buttons or lack data-section
 
-            // Apply Governance Locking
-            ComplianceUI.applyLocking();
+            // Update UI/ATM context based on navigation
+            updateSectionData(sectionId);
 
-            // UI Update
+            // UI Navigation Update
             navButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
             sections.forEach(s => s.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                // Update Topbar Title
+                const sectionHeader = targetSection.querySelector('h2');
+                if (sectionHeader && topbarTitle) {
+                    topbarTitle.textContent = `SLGTI Academic Engine | ${sectionHeader.textContent}`;
+                }
+            }
+
+            // Close sidebar on mobile after navigation
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('open');
+            }
         });
     });
 
-    // Load ATM from LocalStorage if exists
+    // Handle initial data load
     const loadedData = StorageService.load();
     if (loadedData) {
         Object.assign(currentATM, loadedData);
@@ -69,56 +74,93 @@ function initApp() {
     }
 
     // Save Context Button
-    document.getElementById('btn-save-context').addEventListener('click', () => {
-        currentATM.context.department = document.getElementById('department').value;
-        currentATM.context.course = document.getElementById('course').value;
-        currentATM.context.academicYear = document.getElementById('academic-year').value;
-        currentATM.context.semester = document.getElementById('semester').value;
-        
-        if (StorageService.save(currentATM)) {
-            alert('Academic Context Saved.');
-        }
-    });
+    const btnSaveContext = document.getElementById('btn-save-context');
+    if (btnSaveContext) {
+        btnSaveContext.addEventListener('click', () => {
+            currentATM.context.department = document.getElementById('department').value;
+            currentATM.context.course = document.getElementById('course').value;
+            currentATM.context.academicYear = document.getElementById('academic-year').value;
+            currentATM.context.semester = document.getElementById('semester').value;
+            
+            if (StorageService.save(currentATM)) {
+                alert('Academic Context Saved.');
+            }
+        });
+    }
 
     // Export JSON
-    document.getElementById('btn-export-json').addEventListener('click', () => {
-        StorageService.exportToJSON(currentATM);
-    });
+    const btnExport = document.getElementById('btn-export-json');
+    if (btnExport) {
+        btnExport.addEventListener('click', () => StorageService.exportToJSON(currentATM));
+    }
 
     // Import JSON (Modal Logic)
     const modal = document.getElementById('modal-overlay');
-    document.getElementById('btn-import-json').addEventListener('click', () => {
-        modal.style.display = 'flex';
-    });
+    const btnImport = document.getElementById('btn-import-json');
+    if (btnImport) {
+        btnImport.addEventListener('click', () => modal.style.display = 'flex');
+    }
 
-    document.getElementById('btn-close-modal').addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
+    const btnCloseModal = document.getElementById('btn-close-modal');
+    if (btnCloseModal) {
+        btnCloseModal.addEventListener('click', () => modal.style.display = 'none');
+    }
 
-    document.getElementById('btn-confirm-import').addEventListener('click', async () => {
-        const fileInput = document.getElementById('json-file-input');
-        if (fileInput.files.length > 0) {
-            try {
-                const imported = await StorageService.importFromJSON(fileInput.files[0]);
-                Object.assign(currentATM, imported);
-                syncContextToUI();
-                modal.style.display = 'none';
-                alert('ATM Data Imported Successfully.');
-            } catch (err) {
-                alert(err);
+    const btnConfirmImport = document.getElementById('btn-confirm-import');
+    if (btnConfirmImport) {
+        btnConfirmImport.addEventListener('click', async () => {
+            const fileInput = document.getElementById('json-file-input');
+            if (fileInput.files.length > 0) {
+                try {
+                    const imported = await StorageService.importFromJSON(fileInput.files[0]);
+                    Object.assign(currentATM, imported);
+                    syncContextToUI();
+                    ComplianceUI.applyLocking();
+                    modal.style.display = 'none';
+                    alert('ATM Data Imported Successfully.');
+                } catch (err) {
+                    alert(err);
+                }
+            } else {
+                alert('Please select a file.');
             }
-        } else {
-            alert('Please select a file.');
-        }
-    });
+        });
+    }
+}
+
+/**
+ * Sync data before showing section
+ */
+function updateSectionData(sectionId) {
+    if (sectionId === 'section-modules') ModulesUI.render();
+    if (sectionId === 'section-students') DeliveryUI.renderStudents();
+    if (sectionId === 'section-t1') ScopeUI.renderTrainingPlan();
+    if (sectionId === 'section-t2') ScopeUI.renderLessonPlans();
+    if (sectionId === 'section-ca1') ScopeUI.renderAssessmentPlan();
+    if (sectionId === 'section-sa') DeliveryUI.renderAttendance();
+    if (sectionId === 'section-tdr') DeliveryUI.renderTDR();
+    if (sectionId === 'section-ca2') EvaluationUI.renderMarks();
+    if (sectionId === 'section-sdr') EvaluationUI.renderStudentRecords();
+    if (sectionId === 'section-pg') EvaluationUI.renderPracticalGuide();
+    if (sectionId === 'section-compliance') ComplianceUI.render();
+
+    // Apply Governance Locking
+    ComplianceUI.applyLocking();
 }
 
 function syncContextToUI() {
-    document.getElementById('department').value = currentATM.context.department || '';
-    document.getElementById('course').value = currentATM.context.course || '';
-    document.getElementById('academic-year').value = currentATM.context.academicYear || '';
-    document.getElementById('semester').value = currentATM.context.semester || '1';
+    const dept = document.getElementById('department');
+    const course = document.getElementById('course');
+    const year = document.getElementById('academic-year');
+    const sem = document.getElementById('semester');
+
+    if (dept) dept.value = currentATM.context.department || '';
+    if (course) course.value = currentATM.context.course || '';
+    if (year) year.value = currentATM.context.academicYear || '';
+    if (sem) sem.value = currentATM.context.semester || '1';
+    
+    // Update Topbar via ComplianceUI
+    ComplianceUI.render();
 }
 
-// Export for other modules in later phases
 export { currentATM };
